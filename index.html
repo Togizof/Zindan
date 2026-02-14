@@ -4,25 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#050507">
-    
-    <!-- PWA AYARLARI -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZindanMüh">
     
-    <title>Dungeon Engineer: Retro Legend Edition</title>
+    <title>Dungeon Engineer: Dynamic Music Edition</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
-    <!-- Manifest -->
-    <link rel="manifest" href='data:application/json;charset=utf-8,%7B%22name%22%3A%22M%C3%BChendislik%20Zindan%C4%B1%22%2C%22short_name%22%3A%22ZindanApp%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23050507%22%2C%22theme_color%22%3A%22%23050507%22%2C%22orientation%22%3A%22any%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F3421%2F3421110.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
-
     <style>
         :root {
             --bg-dark: #050507; --accent: #3b82f6; --gold: #fbbf24;
             --text-main: #e4e4e7; --text-muted: #71717a;
             --warrior: #ef4444; --mage: #c084fc; --rogue: #3b82f6; --druid: #34d399;
-            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
         }
 
         .rpg-font { font-family: 'MedievalSharp', cursive; }
@@ -37,134 +32,121 @@
             user-select: none;
         }
 
-        /* --- RETRO ATMOSFER KATMANLARI --- */
+        /* --- RETRO ATMOSFER --- */
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
         .bg-grid {
-            background-size: 60px 60px;
+            background-size: 50px 50px;
             background-image: 
-                linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+                linear-gradient(to right, rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
         }
 
-        /* 8-bit Partikül Sistemi */
         .particle {
             position: absolute; border-radius: 2px;
             animation: floatUp linear infinite; opacity: 0;
             z-index: -1;
         }
         @keyframes floatUp {
-            0% { transform: translateY(105vh) rotate(0deg) scale(1); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) rotate(360deg) scale(0.5); opacity: 0; }
+            0% { transform: translateY(105vh) scale(1); opacity: 0; }
+            20% { opacity: 0.5; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
         }
 
-        /* Hareketli Arka Plan Objeleri */
-        .roaming-prop {
-            position: fixed; opacity: 0.07; z-index: -1; pointer-events: none;
-            filter: grayscale(1) contrast(2);
-            animation: roam 20s linear infinite;
-        }
-        @keyframes roam {
-            0% { transform: translate(-10vw, 110vh) rotate(0deg); }
-            100% { transform: translate(110vw, -10vh) rotate(720deg); }
-        }
+        .bg-prop { position: fixed; opacity: 0.08; z-index: -1; pointer-events: none; font-size: 10rem; filter: blur(2px); transition: 0.5s; }
 
         /* --- HUD --- */
         .hud-panel {
             background: rgba(15, 15, 20, 0.95); border: 2px solid #27272a;
-            border-radius: 16px; padding: 15px; display: flex; justify-content: space-between;
+            border-radius: 20px; padding: 15px; display: flex; justify-content: space-between;
             align-items: center; margin-bottom: 25px; box-shadow: var(--card-shadow);
-            backdrop-filter: blur(10px); position: sticky; top: 10px; z-index: 100;
+            backdrop-filter: blur(15px); position: sticky; top: 10px; z-index: 100;
         }
-        .hud-avatar { font-size: 2.5rem; margin-right: 15px; filter: drop-shadow(0 0 10px var(--accent)); }
-        .xp-container { flex: 1; margin: 0 15px; }
-        .xp-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .xp-rank { font-size: 1rem; font-weight: 900; color: var(--gold); }
-        .xp-val { font-size: 0.8rem; color: #fff; opacity: 0.8; }
-        .xp-track { width: 100%; height: 10px; background: #000; border-radius: 2px; border: 1px solid #3f3f46; overflow: hidden; }
-        .xp-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #d97706); width: 0%; transition: width 0.5s steps(10); }
-        
-        .hud-btns { display: flex; gap: 8px; }
-        .circle-btn { 
-            width: 40px; height: 40px; border-radius: 4px; background: rgba(255,255,255,0.05); 
-            border: 2px solid rgba(255,255,255,0.1); color: var(--gold); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.1s;
-        }
-        .circle-btn:active { background: var(--accent); color: white; transform: translateY(2px); }
 
-        /* INPUT AREA */
+        .hud-avatar { font-size: 2.5rem; margin-right: 12px; filter: drop-shadow(0 0 10px var(--accent)); cursor: pointer; }
+        
+        .xp-container { flex: 1; margin: 0 10px; }
+        .xp-header { display: flex; justify-content: space-between; margin-bottom: 4px; align-items: flex-end; }
+        .xp-rank { font-size: 0.9rem; font-weight: 900; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        .xp-val { font-size: 0.7rem; color: #fff; opacity: 0.7; }
+        .xp-track { width: 100%; height: 10px; background: #000; border-radius: 5px; border: 1px solid #333; overflow: hidden; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #d97706); width: 0%; transition: width 0.8s steps(10); }
+
+        .hud-btns { display: flex; gap: 6px; }
+        .circle-btn { 
+            width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.05); 
+            border: 2px solid rgba(255,255,255,0.1); color: var(--gold); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+        }
+        .circle-btn.active { background: var(--gold); color: black; box-shadow: 0 0 10px var(--gold); }
+
+        /* --- CONTENT --- */
+        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 800px) { .main-grid { grid-template-columns: 1.1fr 0.9fr; } }
+
         .summon-scroll { 
-            background: linear-gradient(135deg, rgba(30, 30, 40, 0.8), rgba(15, 15, 20, 0.95));
-            border: 2px solid #3f3f46; border-radius: 12px; padding: 20px; margin-bottom: 30px;
-            box-shadow: var(--card-shadow); border-left: 6px solid var(--accent);
+            background: linear-gradient(145deg, rgba(30, 30, 40, 0.7), rgba(15, 15, 20, 0.95));
+            border: 2px solid #3f3f46; border-radius: 18px; padding: 20px; margin-bottom: 25px;
+            box-shadow: var(--card-shadow); border-left: 5px solid var(--accent);
         }
+
         select, input { 
-            width: 100%; background: #000; border: 2px solid #222; color: white; 
-            padding: 14px; border-radius: 4px; outline: none; margin-bottom: 12px; font-size: 1rem;
+            width: 100%; background: #000; border: 2px solid #333; color: white; 
+            padding: 14px; border-radius: 10px; outline: none; margin-bottom: 10px; font-size: 1rem;
         }
+
         .btn-summon { 
             width: 100%; background: var(--accent); color: white; border: none; padding: 16px; 
-            border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; 
-            box-shadow: 0 5px 0px #1d4ed8; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem;
-            transition: 0.1s;
+            border-radius: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; 
+            box-shadow: 0 5px 0px #1d4ed8; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .btn-summon:active { transform: translateY(4px); box-shadow: 0 1px 0px #1d4ed8; }
+        .btn-summon:active { transform: translateY(3px); box-shadow: 0 1px 0px #1d4ed8; }
 
-        /* LAYOUT TABLET */
-        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 800px) { .main-grid { grid-template-columns: 1fr 1fr; } }
-
-        /* QUEST CARDS */
+        /* --- QUESTS --- */
         .quest-card { 
-            background: #0a0a0c; border: 2px solid #222; border-radius: 8px; margin-bottom: 15px; 
-            position: relative; overflow: hidden; 
+            background: #0a0a0c; border: 2px solid #222; border-radius: 18px; margin-bottom: 15px; 
+            position: relative; overflow: hidden; animation: slideIn 0.4s ease; 
         }
-        .q-stripe { height: 4px; width: 100%; }
-        .q-body { padding: 15px; }
-        .q-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-bottom: 8px; font-weight: bold; }
-        .q-title { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: 0.5px; }
-        .obj-box { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 4px; display: flex; align-items: center; gap: 10px; border: 2px dashed #333; margin-bottom: 15px; }
-        .btn-finish { 
-            width: 100%; background: transparent; border: 2px solid var(--gold); color: var(--gold); 
-            padding: 12px; border-radius: 4px; font-weight: 900; cursor: pointer; 
-            box-shadow: 0 4px 0px var(--gold); transition: 0.1s;
-        }
-        .btn-finish:active { transform: translateY(3px); box-shadow: 0 1px 0px var(--gold); }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .q-stripe { height: 5px; width: 100%; }
+        .q-body { padding: 18px; }
+        .q-meta { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; color: var(--accent); }
+        .q-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 15px; }
+        .obj-box { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 12px; border: 1px dashed #444; margin-bottom: 15px; }
+        .btn-finish { width: 100%; background: transparent; border: 2px solid var(--gold); color: var(--gold); padding: 14px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.1s; box-shadow: 0 4px 0px var(--gold); }
+        .btn-finish:active { transform: translateY(3px); box-shadow: 0 1px 0px var(--gold); background: var(--gold); color: #000; }
 
-        /* SKILL TREE */
+        /* --- SKILLS --- */
         .skill-item { 
             display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.01); 
-            border: 2px solid #1a1a1c; padding: 12px; border-radius: 8px; margin-bottom: 10px; 
+            border: 2px solid #222; padding: 15px; border-radius: 15px; margin-bottom: 10px; 
         }
-        .ring-container { position: relative; width: 45px; height: 45px; }
-        .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.7rem; font-weight: 900; color: white; }
+        .ring-container { position: relative; width: 46px; height: 46px; }
+        .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.7rem; font-weight: 900; }
 
-        /* MODALS */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); padding: 20px; }
-        .modal-content { background: #0c0c0e; border: 3px solid #333; width: 100%; max-width: 450px; padding: 25px; border-radius: 12px; box-shadow: 0 0 50px rgba(0,0,0,0.8); max-height: 80vh; overflow-y: auto; }
-        .close-btn { margin-top: 20px; width: 100%; padding: 14px; background: #222; border: 2px solid #444; color: white; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        /* --- MODALS --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); padding: 20px; }
+        .modal-content { background: #16161a; border: 2px solid #333; width: 100%; max-width: 480px; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px #000; max-height: 85vh; overflow-y: auto; }
+        .close-btn { margin-top: 15px; width: 100%; padding: 15px; background: #27272a; border: 2px solid #444; color: white; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        /* ANIMATIONS & EFFECTS */
-        .floater { position: fixed; pointer-events: none; font-weight: 900; font-size: 1.5rem; z-index: 1000; animation: floatUpText 0.8s steps(8) forwards; color: var(--gold); text-shadow: 2px 2px 0px black; }
-        @keyframes floatUpText { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-80px); opacity: 0; } }
+        .section-header { margin: 25px 0 15px; font-size: 1.3rem; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+        .log-entry { font-size: 0.8rem; padding: 10px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; color: #888; }
         
-        .section-header { margin: 25px 0 15px; font-size: 1.4rem; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+        .floater { position: fixed; pointer-events: none; font-weight: 900; font-size: 1.8rem; z-index: 1000; animation: floatUpText 0.8s steps(8) forwards; color: var(--gold); text-shadow: 2px 2px 0px #000; }
+        @keyframes floatUpText { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
 
-        /* LOG STYLES */
-        .log-month { color: var(--accent); font-size: 0.8rem; margin-top: 15px; margin-bottom: 5px; border-bottom: 2px solid #222; padding-bottom: 5px; font-weight: bold; }
-        .log-entry { font-size: 0.8rem; color: #777; padding: 8px 0; border-bottom: 1px dashed #222; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body id="body">
 
-    <!-- RETRO KATMANLAR -->
     <div class="bg-layer bg-grid"></div>
     <div id="particles" class="bg-layer"></div>
-    <div id="roamingProps" class="bg-layer"></div>
+    <div class="bg-prop" style="top:15%; right:-5%">🐲</div>
+    <div class="bg-prop" style="bottom:15%; left:-5%">⚔️</div>
 
+    <!-- HUD -->
     <div class="hud-panel">
-        <div class="hud-avatar">🧙‍♂️</div>
+        <div class="hud-avatar" id="avatar" onclick="playSfx('summon')">🧙‍♂️</div>
         <div class="xp-container">
             <div class="xp-header">
                 <span id="rankLabel" class="xp-rank rpg-font">Kayıp Stajyer</span>
@@ -173,8 +155,10 @@
             <div class="xp-track"><div id="xpFill" class="xp-fill"></div></div>
         </div>
         <div class="hud-btns">
+            <!-- MÜZİK BUTONU -->
+            <button class="circle-btn" id="bgmBtn" onclick="toggleBGM()" title="Müzik">🎵</button>
             <button class="circle-btn" onclick="openModal('rankModal')" title="Rütbeler">❓</button>
-            <button class="circle-btn" onclick="openModal('logModal')" title="Macera Günlüğü">📜</button>
+            <button class="circle-btn" onclick="openModal('logModal')" title="Günlük">📜</button>
             <button class="circle-btn" onclick="openModal('manageModal')" title="Ayarlar">⚙️</button>
             <button class="circle-btn" onclick="openModal('saveModal')" title="Yedek">💾</button>
         </div>
@@ -183,7 +167,7 @@
     <div class="main-grid">
         <div class="left-col">
             <div class="summon-scroll">
-                <div class="scroll-title rpg-font" style="color:#666; margin-bottom:10px; font-size:0.8rem; font-weight:bold;">[ YENİ YETENEK PARŞÖMENİ ]</div>
+                <div style="font-size:0.75rem; color:#888; margin-bottom:10px; letter-spacing:1px; font-weight:bold;">[ YENİ YETENEK PARŞÖMENİ ]</div>
                 <select id="courseSelect" class="mono-font"></select>
                 <input type="text" id="topicInput" placeholder="Yetenek Adı..." autocomplete="off">
                 <button class="btn-summon rpg-font" onclick="addTopic()"><span>📜</span> PARŞÖMENİ AÇ</button>
@@ -191,7 +175,7 @@
 
             <h3 class="section-header rpg-font">🛡️ Aktif Questler</h3>
             <div id="questList"></div>
-            <div id="emptyState" style="text-align:center; padding:50px; color:#444; font-style:italic;">"Zindan şu an huzurlu..."</div>
+            <div id="emptyState" style="text-align:center; padding:50px; color:#444; font-style:italic;">"Zindanda sessizlik hakim..."</div>
         </div>
 
         <div class="right-col">
@@ -201,30 +185,18 @@
     </div>
 
     <!-- MODALS -->
-    <div id="logModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="rpg-font" style="color:var(--gold)">📜 Macera Günlüğü</h2>
-            <div id="historyLog" style="margin-top:15px; font-size:0.9rem;"></div>
-            <button class="close-btn" onclick="closeModal('logModal')">KAPAT</button>
-        </div>
-    </div>
-
-    <div id="rankModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="rpg-font" style="color:var(--gold)">🏆 Rütbe Skalası</h2>
-            <div id="rankTable" style="margin-top:15px; max-height: 300px; overflow-y: auto;"></div>
-            <button class="close-btn" onclick="closeModal('rankModal')">KAPAT</button>
-        </div>
-    </div>
+    <div id="rankModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Rütbe Skalası</h2><div id="rankTable" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('rankModal')">KAPAT</button></div></div>
+    
+    <div id="logModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Macera Günlüğü</h2><div id="historyLog" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('logModal')">KAPAT</button></div></div>
 
     <div id="manageModal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="rpg-font" style="color:var(--gold)">⚙️ Ders Yönetimi</h2>
-            <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; margin:15px 0; border:1px solid #222;">
-                <input type="text" id="newC_Code" placeholder="Kod (MAT101)">
-                <input type="text" id="newC_Name" placeholder="İsim (Matematik)">
-                <input type="text" id="newC_Emoji" placeholder="Emoji (🧪)">
-                <button class="btn-summon" style="padding:10px" onclick="addNewCourse()">DERSİ EKLE</button>
+            <h2 class="rpg-font" style="color:var(--gold)">Zindan Ayarları</h2>
+            <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin:15px 0; border: 1px solid #333;">
+                <input type="text" id="newC_Code" placeholder="Kod (MAT202)">
+                <input type="text" id="newC_Name" placeholder="İsim (Diferansiyel)">
+                <input type="text" id="newC_Emoji" placeholder="Emoji (⚔️)">
+                <button class="btn-summon" style="padding:10px" onclick="addNewCourse()">EKLE</button>
             </div>
             <div id="courseManageList"></div>
             <button class="close-btn" onclick="closeModal('manageModal')">KAPAT</button>
@@ -233,116 +205,148 @@
 
     <div id="saveModal" class="modal-overlay">
         <div class="modal-content" style="text-align:center;">
-            <h2 class="rpg-font" style="color:var(--gold)">💾 Veri Kristali</h2>
-            <p style="color:#666; font-size:0.8rem; margin:15px 0;">Zindan verilerini kopyalayıp yedekle.</p>
+            <h2 class="rpg-font" style="color:var(--gold)">Veri Kristali</h2>
+            <p style="margin:15px 0; color:#888; font-size:0.9rem;">Zindan verilerini kopyalayıp başka bir cihaza taşıyabilirsin.</p>
             <button class="btn-finish" style="border-color:var(--accent); color:var(--accent); margin-bottom:12px;" onclick="exportData()">💎 KRİSTALİ KOPYALA</button>
             <button class="btn-finish" style="border-color:var(--druid); color:var(--druid);" onclick="importData()">📥 KRİSTAL YÜKLE</button>
             <button class="close-btn" onclick="closeModal('saveModal')">KAPAT</button>
         </div>
     </div>
 
-    <div id="levelModal" class="modal-overlay">
-        <div class="modal-content" style="text-align:center; border: 4px solid var(--gold);">
-            <div style="font-size:5rem;">⭐</div>
-            <h1 class="rpg-font" style="color:var(--gold)">RÜTBE ATLANDI!</h1>
-            <p id="newLvl" class="rpg-font" style="font-size:1.5rem; color:white; margin-top:10px;"></p>
-            <button class="close-btn" style="background:var(--gold); color:black; font-weight:900;" onclick="closeModal('levelModal')">DEVAM ET</button>
-        </div>
-    </div>
+    <div id="levelModal" class="modal-overlay"><div class="modal-content" style="text-align:center; border: 4px solid var(--gold);"><div style="font-size:5rem">🏆</div><h1 class="rpg-font" style="color:var(--gold)">TERFİ ALDIN!</h1><p id="newLvl" class="rpg-font" style="font-size:1.5rem; color:white; margin-top:10px;"></p><button class="close-btn" style="background:var(--gold); color:black;" onclick="closeModal('levelModal')">DEVAM ET</button></div></div>
 
     <script>
-        // VERİ TABANI
-        const DB_KEY = 'dungeon_engineer_v11';
+        const DB_KEY = 'dungeon_engineer_dynamic_v3';
         
-        let state = JSON.parse(localStorage.getItem(DB_KEY)) || {
-            courses: {
-                'MAT2062': { n: 'Diferansiyel Denklemler', e: '⚔️' },
-                'PHY1002': { n: 'Fizik II', e: '🧪' }
-            },
-            db: [], history: [], xp: 0
-        };
-
         const RANKS = [
-            { name: "Kayıp Stajyer", min: 0, max: 1000 },
-            { name: "Kod Çırağı", min: 1000, max: 3000 },
-            { name: "Sistem Savaşçısı", min: 3000, max: 7000 },
-            { name: "Algoritma Simyacısı", min: 7000, max: 15000 },
-            { name: "Veri Muhafızı", min: 15000, max: 25000 },
-            { name: "Siber Şövalye", min: 25000, max: 40000 },
-            { name: "Mekanik Büyücü", min: 40000, max: 65000 },
-            { name: "Kuantum Üstadı", min: 65000, max: 100000 },
-            { name: "Ejder Mühendis", min: 100000, max: 9999999 }
+            { name: "Kayıp Stajyer", min: 0, max: 1000, icon: "🧙‍♂️" },
+            { name: "Kod Çırağı", min: 1000, max: 3000, icon: "📜" },
+            { name: "Sistem Savaşçısı", min: 3000, max: 7000, icon: "⚔️" },
+            { name: "Algoritma Simyacısı", min: 7000, max: 15000, icon: "🧪" },
+            { name: "Veri Muhafızı", min: 15000, max: 25000, icon: "🛡️" },
+            { name: "Siber Şövalye", min: 25000, max: 45000, icon: "🗡️" },
+            { name: "Mekanik Büyücü", min: 45000, max: 70000, icon: "⚙️" },
+            { name: "Kuantum Üstadı", min: 70000, max: 110000, icon: "🌌" },
+            { name: "Ejder Mühendis", min: 110000, max: 9999999, icon: "🐲" }
         ];
 
         const PROTOCOL = [
-            { d: 1, i: "📖", t: "OKUMA", desc: "Anki & Giriş", xp: 150 },
-            { d: 3, i: "⚔️", t: "PRATİK", desc: "3 Soru Çöz", xp: 250 },
-            { d: 7, i: "🧠", t: "FEYNMAN", desc: "Konuyu Anlat", xp: 450 },
-            { d: 14, i: "🐲", t: "BOSS", desc: "Zor Sorular", xp: 700 },
-            { d: 30, i: "👑", t: "USTALIK", desc: "Genel Tekrar", xp: 1200 }
+            { d: 1, i: "📖", t: "GRIMOIRE", desc: "Anki Girişi & Okuma", xp: 150 },
+            { d: 3, i: "⚔️", t: "PRATİK", desc: "3 Temel Soru Çöz", xp: 250 },
+            { d: 7, i: "🧠", t: "FEYNMAN", desc: "Konuyu Birine Anlat", xp: 450 },
+            { d: 14, i: "🐲", t: "BOSS RAID", desc: "Zor Soruları Avla", xp: 800 },
+            { d: 30, i: "👑", t: "LEGEND", desc: "Karışık Test & Ustalık", xp: 1500 }
         ];
 
-        // --- 8-BIT SES MOTORU ---
+        let state = JSON.parse(localStorage.getItem(DB_KEY)) || {
+            courses: { 'MAT2062': { n: 'Diferansiyel', e: '⚔️' }, 'PHY1002': { n: 'Fizik II', e: '🧪' } },
+            db: [], history: [], xp: 0
+        };
+
+        // --- SES VE DİNAMİK MÜZİK MOTORU ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let bgmInterval = null;
+        let isBGMPlaying = false;
+        let melodyStep = 0;
+        let chordIndex = 0;
+
+        // Kadim Akor Dizilimleri (A minor - F Major - G Major - E Major)
+        const CHORDS = [
+            [220.00, 261.63, 329.63, 440.00], // Am (A2, C3, E3, A3)
+            [174.61, 220.00, 261.63, 349.23], // F (F2, A2, C3, F3)
+            [196.00, 246.94, 293.66, 392.00], // G (G2, B2, D3, G3)
+            [164.81, 207.65, 246.94, 329.63]  // E (E2, G#2, B2, E3)
+        ];
+
         function playSfx(type) {
             if(audioCtx.state==='suspended') audioCtx.resume();
             const now = audioCtx.currentTime;
-            
-            const osc = (f, t, d, v=0.08, wave='square') => {
-                const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-                o.connect(g); g.connect(audioCtx.destination);
-                o.type=wave; o.frequency.setValueAtTime(f,t);
-                g.gain.setValueAtTime(v,t); g.gain.linearRampToValueAtTime(0,t+d);
-                o.start(t); o.stop(t+d);
-            };
-
-            if(type==='summon') { 
-                osc(150, now, 0.1, 0.1); osc(300, now+0.05, 0.2, 0.08); // Retro summon blip
+            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            o.connect(g); g.connect(audioCtx.destination);
+            if(type==='summon') {
+                o.type='square'; o.frequency.setValueAtTime(150, now); o.frequency.exponentialRampToValueAtTime(600, now+0.2);
+                g.gain.setValueAtTime(0.1, now); g.gain.linearRampToValueAtTime(0, now+0.2); o.start(); o.stop(now+0.2);
             } else if(type==='xp') {
-                osc(880, now, 0.05, 0.05); osc(1760, now+0.05, 0.1, 0.03); // Retro coin sound
-            } else if(type==='lvl') {
-                // Retro level-up arpeggio
-                [523.25, 659.25, 783.99, 1046.50].forEach((f,i) => osc(f, now+i*0.1, 0.3, 0.06));
+                o.type='square'; o.frequency.setValueAtTime(880, now); g.gain.setValueAtTime(0.05, now); o.start(); o.stop(now+0.1);
             }
         }
 
-        const save = () => {
-            localStorage.setItem(DB_KEY, JSON.stringify(state));
-            render();
-        };
+        // --- GELİŞMİŞ 8-BIT MÜZİK MOTORU ---
+        function toggleBGM() {
+            if(audioCtx.state==='suspended') audioCtx.resume();
+            const btn = document.getElementById('bgmBtn');
+            
+            if (isBGMPlaying) {
+                clearInterval(bgmInterval);
+                isBGMPlaying = false;
+                btn.classList.remove('active');
+            } else {
+                isBGMPlaying = true;
+                btn.classList.add('active');
+                
+                bgmInterval = setInterval(() => {
+                    const now = audioCtx.currentTime;
+                    const currentChord = CHORDS[chordIndex];
+                    
+                    // Melodi Notası Seçimi (Arpej)
+                    const freq = currentChord[melodyStep % currentChord.length];
+                    
+                    // Melodi Osc
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = (melodyStep % 8 === 0) ? 'square' : 'triangle'; // Her vuruşta karakter değişimi
+                    osc.frequency.setValueAtTime(freq, now);
+                    
+                    gain.gain.setValueAtTime(0.02, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                    
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(); osc.stop(now + 0.5);
 
+                    // Her 2 vuruşta bir Bas vuruşu ekle (Derinlik için)
+                    if (melodyStep % 2 === 0) {
+                        const bassOsc = audioCtx.createOscillator();
+                        const bassGain = audioCtx.createGain();
+                        bassOsc.type = 'triangle';
+                        bassOsc.frequency.setValueAtTime(currentChord[0] / 2, now);
+                        bassGain.gain.setValueAtTime(0.015, now);
+                        bassGain.gain.linearRampToValueAtTime(0, now + 0.8);
+                        bassOsc.connect(bassGain); bassGain.connect(audioCtx.destination);
+                        bassOsc.start(); bassOsc.stop(now + 0.8);
+                    }
+
+                    melodyStep++;
+                    
+                    // Her 16 notada bir akor değiştir (Varyasyonun kalbi burası)
+                    if (melodyStep % 16 === 0) {
+                        chordIndex = (chordIndex + 1) % CHORDS.length;
+                    }
+                }, 350); // Tempo
+            }
+        }
+
+        const save = () => { localStorage.setItem(DB_KEY, JSON.stringify(state)); render(); };
         const getRank = () => RANKS.find(r => state.xp >= r.min && state.xp < r.max) || RANKS[RANKS.length-1];
 
-        // --- CORE ---
         function addTopic() {
             const c = document.getElementById('courseSelect').value;
             const t = document.getElementById('topicInput').value.trim();
-            if(!t) return;
-            playSfx('summon');
-            state.db.unshift({
-                id: Date.now(), c, t,
-                tasks: PROTOCOL.map(p => ({ ...p, done: false, date: new Date(Date.now()+p.d*86400000).toISOString() }))
-            });
+            if(!t) return; playSfx('summon');
+            state.db.unshift({ id: Date.now(), c, t, tasks: PROTOCOL.map(p => ({ ...p, done: false, date: new Date(Date.now()+p.d*86400000).toISOString() })) });
             document.getElementById('topicInput').value=''; save();
         }
 
         function completeQuest(e, id, idx) {
             const item = state.db.find(i => i.id === id); if(!item) return;
             const oldR = getRank().name; const gain = item.tasks[idx].xp;
-            
-            item.tasks[idx].done = true;
-            state.xp += gain;
+            item.tasks[idx].done = true; state.xp += gain;
             state.history.unshift({t:item.t, q:item.tasks[idx].t, xp:gain, ts: Date.now()});
-            
+            if(state.history.length > 100) state.history.pop();
             playSfx('xp');
-            
             const f = document.createElement('div'); f.className='floater mono-font'; f.innerText=`+${gain} XP`;
             f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
             setTimeout(()=>f.remove(),800);
-
-            if(getRank().name !== oldR) { 
-                playSfx('lvl'); document.getElementById('newLvl').innerText=getRank().name; openModal('levelModal');
-            }
+            if(getRank().name !== oldR) { document.getElementById('newLvl').innerText=getRank().name; openModal('levelModal'); }
             save();
         }
 
@@ -357,132 +361,64 @@
         }
 
         function openModal(id) {
-            if(id==='logModal') {
+            const m = document.getElementById(id);
+            if(id==='rankModal') {
+                const t = document.getElementById('rankTable'); t.innerHTML='';
+                RANKS.forEach(r => t.innerHTML += `<div class="log-entry" style="color:${r.name===getRank().name?'var(--gold)':'#555'}"><span>${r.icon} ${r.name}</span><span>${r.min}+ XP</span></div>`);
+            } else if(id==='logModal') {
+                const l = document.getElementById('historyLog'); l.innerHTML='';
                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 state.history = state.history.filter(h => Date.now() - h.ts < thirtyDays);
-                const l = document.getElementById('historyLog'); l.innerHTML='';
-                if(!state.history || state.history.length===0) l.innerHTML='Henüz kayıt yok.';
+                if(state.history.length===0) l.innerHTML='Henüz kayıt yok...';
                 let lastM = "";
                 state.history.forEach(h => {
                     const mName = new Date(h.ts).toLocaleDateString('tr-TR', {month:'long', year:'numeric'});
-                    if(mName !== lastM) { l.innerHTML += `<div class="log-month mono-font">${mName}</div>`; lastM = mName; }
-                    l.innerHTML += `<div class="log-entry"><span>${h.t} (${h.q})</span><span class="log-xp">+${h.xp} XP</span></div>`;
+                    if(mName !== lastM) { l.innerHTML += `<div style="color:var(--accent); margin-top:15px; font-weight:bold; font-size:0.7rem; border-bottom:1px solid #333">${mName.toUpperCase()}</div>`; lastM = mName; }
+                    l.innerHTML += `<div class="log-entry"><span>${h.t} - ${h.q}</span><span style="color:var(--gold)">+${h.xp}</span></div>`;
                 });
-            } else if(id==='rankModal') {
-                const t = document.getElementById('rankTable'); t.innerHTML='';
-                RANKS.forEach(r => t.innerHTML += `<div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #222; color:${r.name===getRank().name?'var(--gold)':'#555'}; font-size:0.85rem;"><span>${r.name}</span><span>${r.min}+ XP</span></div>`);
             } else if(id==='manageModal') {
-                const l = document.getElementById('courseManageList'); l.innerHTML='';
-                for(let k in state.courses) l.innerHTML+=`<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222"><span>${state.courses[k].e} ${k}</span><button style="color:red;background:none;border:none;font-size:1.2rem" onclick="delCourse('${k}')">🗑️</button></div>`;
+                const ml = document.getElementById('courseManageList'); ml.innerHTML='';
+                for(let k in state.courses) ml.innerHTML+=`<div class="log-entry"><span>${state.courses[k].e} ${k}</span><button style="color:red; background:none; border:none; font-size:1.2rem" onclick="delCourse('${k}')">🗑️</button></div>`;
             }
-            document.getElementById(id).style.display='flex';
+            m.style.display='flex';
         }
 
         const closeModal = (id) => document.getElementById(id).style.display='none';
         const delCourse = (k) => { if(confirm('Silinsin mi?')) { delete state.courses[k]; save(); openModal('manageModal'); } };
-        const exportData = () => { prompt("Kodu Kopyala:", btoa(encodeURIComponent(JSON.stringify(state)))); };
-        const importData = () => { try{ state=JSON.parse(decodeURIComponent(atob(prompt("Kodu Yapıştır:")))); save(); alert("Yüklendi!"); }catch(e){alert("Hata!");} };
+        const exportData = () => { const code = btoa(encodeURIComponent(JSON.stringify(state))); const t = document.createElement("textarea"); document.body.appendChild(t); t.value=code; t.select(); document.execCommand("copy"); document.body.removeChild(t); alert("Kristal Kopyalandı!"); };
+        const importData = () => { try { state=JSON.parse(decodeURIComponent(atob(prompt("Kodu Yapıştır:")))); save(); } catch(e){alert("Hata!");} };
 
         function render() {
-            const r = getRank();
-            document.getElementById('rankLabel').innerText = r.name;
+            const r = getRank(); document.getElementById('rankLabel').innerText = r.name; document.getElementById('avatar').innerText = r.icon;
             document.getElementById('xpLabel').innerText = state.xp.toLocaleString();
             document.getElementById('xpFill').style.width = Math.min(((state.xp-r.min)/(r.max-r.min))*100, 100)+'%';
-
             const sel = document.getElementById('courseSelect'); sel.innerHTML='';
             for(let k in state.courses) sel.innerHTML+=`<option value="${k}">${k} - ${state.courses[k].n}</option>`;
-
-            const ql = document.getElementById('questList'); ql.innerHTML='';
-            let count=0; const today = new Date(); today.setHours(0,0,0,0);
-
+            const ql = document.getElementById('questList'); ql.innerHTML=''; let count=0; const today = new Date(); today.setHours(0,0,0,0);
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 item.tasks.forEach((t, i) => {
                     if(!t.done && new Date(t.date) <= today) {
-                        count++;
-                        ql.innerHTML += `
-                        <div class="quest-card">
-                            <div class="q-stripe" style="background:var(--accent)"></div>
-                            <div class="q-body">
-                                <div class="q-meta">
-                                    <span style="color:var(--accent)">${cData.e} ${item.c}</span>
-                                    <span style="color:var(--gold)">+${t.xp} XP</span>
-                                </div>
-                                <div class="q-title rpg-font">${item.t}</div>
-                                <div class="obj-box">
-                                    <span style="font-size:1.5rem">${t.i}</span>
-                                    <div><div style="font-weight:bold; color:#fff">${t.t}</div><div style="font-size:0.75rem; color:#666">${t.desc}</div></div>
-                                </div>
-                                <button class="btn-finish rpg-font" onclick="completeQuest(event, ${item.id}, ${i})">⚔️ QUESTİ TAMAMLA</button>
-                            </div>
-                        </div>`;
+                        count++; ql.innerHTML += `<div class="quest-card"><div class="q-stripe" style="background:var(--accent)"></div><div class="q-body"><div class="q-meta"><span>${cData.e} ${item.c}</span><span style="color:var(--gold)">+${t.xp} XP</span></div><div class="q-title rpg-font">${item.t}</div><div class="obj-box"><span>${t.i}</span><div><div style="font-weight:bold; font-size:0.85rem; color:var(--accent);">${t.t}</div><div style="font-size:0.75rem; color:#888;">${t.desc}</div></div></div><button class="btn-finish rpg-font" onclick="completeQuest(event,${item.id},${i})">⚔️ QUESTİ BİTİR</button></div></div>`;
                     }
                 });
             });
             document.getElementById('emptyState').style.display = count===0 ? 'block' : 'none';
-
             const sl = document.getElementById('skillList'); sl.innerHTML='';
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 const pct = (item.tasks.filter(t=>t.done).length/5)*100;
-                sl.innerHTML += `
-                <div class="skill-item">
-                    <div style="display:flex;align-items:center;gap:15px;flex:1">
-                        <div style="font-size:2rem">${cData.e}</div>
-                        <div><div style="font-weight:bold;color:#fff">${item.t}</div><div style="font-size:0.8rem;color:gray" class="mono-font">${item.c}</div></div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:15px">
-                        <div class="ring-container">
-                            <svg width="50" height="50">
-                                <circle stroke="#222" stroke-width="4" fill="transparent" r="22" cx="25" cy="25"/>
-                                <circle stroke="var(--accent)" stroke-width="4" fill="transparent" r="22" cx="25" cy="25" style="stroke-dasharray:138; stroke-dashoffset:${138-(pct/100)*138}; transition:1s steps(10)"/>
-                            </svg>
-                            <div class="ring-text mono-font">%${Math.round(pct)}</div>
-                        </div>
-                        <button style="border:none;background:none;color:#333;font-size:1.2rem" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button>
-                    </div>
-                </div>`;
+                sl.innerHTML += `<div class="skill-item"><div style="display:flex;align-items:center;gap:12px;flex:1"><div style="font-size:1.8rem">${cData.e}</div><div><div style="font-weight:bold;color:#fff;font-size:1rem">${item.t}</div><div style="font-size:0.7rem;color:var(--accent);font-weight:bold" class="mono-font">${item.c}</div></div></div><div style="display:flex;align-items:center;gap:12px"><div class="ring-container"><svg width="46" height="46"><circle stroke="#222" stroke-width="4" fill="transparent" r="20" cx="23" cy="23"/><circle stroke="var(--accent)" stroke-width="4" fill="transparent" r="20" cx="23" cy="23" style="stroke-dasharray:126; stroke-dashoffset:${126-(pct/100)*126}; transition:1s steps(10)"/></svg><div class="ring-text mono-font">%${Math.round(pct)}</div></div><button style="border:none;background:none;color:red;opacity:0.3;font-size:1.2rem;cursor:pointer" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button></div></div>`;
             });
         }
 
-        // --- RETRO GÖRSEL EFEKTLER ---
-        
-        // Sarı ve Beyaz 8-bit Partiküller
-        function initParticles() {
-            const pContainer = document.getElementById('particles');
-            for(let i=0; i<60; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const size = Math.random() * 4 + 2;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                p.style.left = Math.random() * 100 + 'vw';
-                p.style.backgroundColor = Math.random() > 0.5 ? '#fbbf24' : '#ffffff';
-                p.style.animationDuration = (Math.random() * 8 + 4) + 's';
-                p.style.animationDelay = (Math.random() * 5) + 's';
-                pContainer.appendChild(p);
-            }
+        for(let i=0;i<40;i++){ 
+            const p=document.createElement('div'); p.className='particle'; 
+            p.style.left=Math.random()*100+'vw'; p.style.width=p.style.height=Math.random()*3+1+'px'; 
+            p.style.backgroundColor=Math.random()>0.5?'var(--gold)':'#fff';
+            p.style.animationDuration=Math.random()*10+5+'s'; p.style.animationDelay=Math.random()*5+'s'; 
+            document.getElementById('particles').appendChild(p); 
         }
-
-        // Gezinen Retro Objeler (Ejder, Kılıç, Kalkan, Büyü, Parşömen)
-        const props = ['🐉', '⚔️', '🛡️', '🪄', '📜', '🔱', '💎', '🏺'];
-        function initRoamingProps() {
-            const rContainer = document.getElementById('roamingProps');
-            for(let i=0; i<12; i++) {
-                const p = document.createElement('div');
-                p.className = 'roaming-prop';
-                p.innerText = props[Math.floor(Math.random() * props.length)];
-                p.style.fontSize = (Math.random() * 4 + 2) + 'rem';
-                p.style.left = Math.random() * 100 + 'vw';
-                p.style.top = Math.random() * 100 + 'vh';
-                p.style.animationDuration = (Math.random() * 30 + 20) + 's';
-                p.style.animationDelay = (Math.random() * 20 * -1) + 's';
-                rContainer.appendChild(p);
-            }
-        }
-
-        initParticles();
-        initRoamingProps();
         render();
     </script>
 </body>

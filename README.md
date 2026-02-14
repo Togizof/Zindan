@@ -1,55 +1,55 @@
-🐲 Mühendislik Zindanı: Macera Kaydı (User Log)
+🐲 Dungeon Engineer: Engineering Mastery Protocol
 
-Mühendislik Zindanı, karmaşık mühendislik konularını parçalara ayırıp fethetmenizi sağlayan, RPG (Rol Yapma Oyunu) temelli bir "Ustalık Protokolü" yönetim sistemidir. Bu uygulama, ders çalışmayı bir görev listesinden çıkarıp bir karakter geliştirme yolculuğuna dönüştürür.
+Dungeon Engineer, karmaşık mühendislik disiplinlerini kalıcı olarak öğrenmek için RPG kurgusuyla nörobilimsel yöntemleri birleştiren bir öğrenme ekosistemidir. Bu sistem, bilgiyi sadece pasif bir şekilde tüketmek yerine, onu 30 günlük bir periyotta beş farklı aşamada işleyerek uzun süreli hafızaya mühürlemeyi hedefler.
 
-🛡️ Uygulama Ne İşe Yarar?
+🛡️ Metodoloji ve Bilimsel Temel
 
-Bu uygulama, "Aralıklı Tekrar" (Spaced Repetition) ve "Aktif Hatırlama" (Active Recall) tekniklerini, bir oyun kurgusu içine yerleştirir. Bir konuyu sadece okuyup geçmek yerine, onu 30 günlük bir "Mühendislik Protokolü" sürecine tabi tutar.
+Bu zindan, öğrenme sürecini tesadüfe bırakmaz; başarısı kanıtlanmış üç ana bilişsel tekniği temel alır:
 
-📜 Mühendislik Protokolü (5 Kadim Aşama)
+Active Recall (Aktif Hatırlama): Bilgiyi sadece okumak yerine, zihinden geri çağırmayı (test etmeyi) zorunlu kılar.
 
-Bir konuyu sisteme eklediğinizde, uygulama sizin için şu questleri (görevleri) sırayla oluşturur:
+Spaced Repetition (Aralıklı Tekrar): Unutma eğrisini kırmak için bilgiyi tam unutulmaya başlandığı anlarda tekrar karşınıza çıkarır.
 
-📖 GRIMOIRE (1. Gün): Konuyu Anki destesine ekle ve ilk okumayı yap. Bilgiyi zindana kaydet.
+Feynman Tekniği: Bir konuyu hiç bilmeyen birine anlatacak kadar basitleştirme ilkesine dayanarak derinlemesine anlayışı sağlar.
 
-⚔️ ANTRENMAN (3. Gün): Temel seviye 3 soru çöz. Kılıcını (bilgini) bileyle.
+📜 Neden 5 Aşamalı Protokol?
 
-🧠 FEYNMAN (7. Gün): Konuyu kağıda şematize et ve hiç bilmeyen birine anlatır gibi sesli anlat. Büyüyü ustalaştır.
+İnsan beyni, yeni öğrenilen bilgiyi 24 saat içinde büyük oranda unutmaya programlıdır. Dungeon Engineer, bu unutma eğrisini 1, 3, 7, 14 ve 30. günlerde beş stratejik müdahale ile keser. Her aşama, bilginin beyindeki nöral bağlarını daha da güçlendirerek "stajyerlikten" "ustalığa" geçişi simgeler.
 
-🐉 BOSS RAID (14. Gün): Vize/Final ayarında zor soruları ve çıkmış soruları avla. Gerçek canavarlarla yüzleş.
+⚔️ Beş Kadim Aşama (The Mastery Protocol)
 
-👑 LEGEND (30. Gün): Karışık testler çöz ve konuyu hafızanda ölümsüzleştir.
+Sisteme bir "Yetenek" eklediğinizde, şu görevler sırasıyla zindan kapısında belirecektir:
 
-🏆 İlerleme ve Rütbeler
+📖 GRIMOIRE (1. Gün): Konuyla ilk temas. Bilginin kaynağını (notlar, kitaplar) incele ve temel yapıyı Anki gibi dijital bir hafıza sistemine kaydet.
 
-Tamamladığınız her görev size XP (Deneyim Puanı) kazandırır. XP topladıkça karakteriniz şu ünvanları kazanır:
+⚔️ TALİM (3. Gün): Zihin kılıcını bileyleme zamanı. Konuyla ilgili 3 temel soruyu, kaynaklara bakmadan çözerek aktif hatırlama gerçekleştir.
 
-Kayıp Stajyer: Zindanın girişinde yolunu arayan yolcu. (0 - 1000 XP)
+🧠 FEYNMAN (7. Gün): Büyüyü ustalaştır. Konuyu kağıda şematize et ve sanki bir sınıfa ders anlatıyormuşsun gibi sesli bir şekilde açıkla.
 
-Kod Çırağı: İlk algoritmalarını başarıyla çalıştıran. (1000 - 3000 XP)
+🐲 BOSS RAID (14. Gün): Gerçek canavarlarla yüzleş. Vize veya final seviyesindeki zor soruları ve geçmiş yıllarda çıkmış problemleri tek başına avla.
 
-...
+👑 LEGEND (30. Gün): Karışık testler ve genel bir tekrarla konuyu zihnine ebediyen mühürle ve efsanevi statüye ulaş.
 
-Ejder Mühendis: Zindanın en zorlu derslerini dize getiren kadim savaşçı. (130,000+ XP)
+🏆 İlerleme ve Karakter Gelişimi
 
-Mühendislik Tanrısı: Artık bilgiye hükmeden nihai varlık. (200,000+ XP)
+Tamamlanan her görev size XP (Deneyim Puanı) kazandırır. Sistem, kazandığınız puanlara göre karakterinizi otomatik olarak rütbelendirir:
 
-⚙️ Temel Özellikler
+🧙‍♂️ Kayıp Stajyer: Yolculuğun başlangıcı.
 
-Ders Yönetimi: Sabit derslerle sınırlı değilsiniz. Kendi derslerinizi, kodlarını ve emojilerini ekleyip silebilirsiniz.
+🛡️ Veri Muhafızı: Bilgiyi korumaya başlayan savaşçı.
 
-Yetenek Ağacı: Hangi konuda yüzde kaç ustalaştığınızı dairesel ilerleme çubuklarıyla takip edin.
+🌌 Kuantum Üstadı: Teorik derinliğe ulaşmış mühendis.
 
-Veri Kristali (💾): İlerlemeniz tarayıcınızda saklanır. Cihaz değiştirmek isterseniz "Kayıt Kristali" oluşturup kodu kopyalayarak verilerinizi taşıyabilirsiniz.
+🔱 Mühendislik Tanrısı: Bilgiye ve zindana tamamen hükmeden nihai varlık.
 
-Atmosferik Deneyim: Hareketli arka plan, büyülü ses efektleri ve RPG fontlarıyla tam bir oyun deneyimi.
+⚙️ Teknik Özellikler
 
-🗝️ Başarı İçin İpuçları
+Aylık Macera Günlüğü: Tüm zaferleriniz ay bazlı olarak parşömenlere kaydedilir ve her 30 günde bir otomatik olarak temizlenerek zindanın performansı korunur.
 
-Her Gün Ziyaret Et: Günlük questler sadece günü geldiğinde belirir. Zindanı kontrol etmeyi unutma.
+Yetenek Ağacı: Her konunun gelişimini dairesel % ilerleme göstergeleri üzerinden anlık takip edin.
 
-Dürüst Ol: Görevi gerçekten tamamlamadan "Quest'i Bitir" butonuna basma; sahte XP seni sınav canavarına karşı korumaz!
+Veri Kristali: İlerlemeniz localStorage üzerinde mühürlenir; cihaz değiştirmek isterseniz kristali kopyalayarak verilerinizi ışınlayabilirsiniz.
 
-App Olarak Kullan: Tarayıcı menüsünden "Uygulamayı Yükle" diyerek zindanı ana ekranına taşı ve bir dokunuşla maceraya başla.
+Retro Atmosfer: 8-bit ses efektleri ve hareketli arka plan ögeleriyle gerçek bir RPG deneyimi.
 
-Yolun açık olsun, Ejder Mühendis! Zindan seni bekliyor. ⚔️🔥
+"Zindan dürüstleri sever; görevi gerçekten bitirmeden parşömeni mühürleme. Yolun açık olsun Ejder Mühendis!" ⚔️🔥

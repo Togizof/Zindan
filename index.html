@@ -11,10 +11,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZindanMüh">
     
-    <!-- GELİŞMİŞ MANIFEST (Base64) -->
+    <!-- MANIFEST -->
     <link rel="manifest" href='data:application/json;charset=utf-8,%7B%22name%22%3A%22M%C3%BChendislik%20Zindan%C4%B1%22%2C%22short_name%22%3A%22Zindan%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23050507%22%2C%22theme_color%22%3A%22%23050507%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F3421%2F3421110.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D'>
 
-    <title>Dungeon Engineer: God Mode PWA</title>
+    <title>Dungeon Engineer: Grimoire Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
@@ -128,11 +128,29 @@
         .ring-container { position: relative; width: 46px; height: 46px; }
         .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.7rem; font-weight: 900; }
 
+        /* --- MODALS --- */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); padding: 20px; }
         .modal-content { background: #16161a; border: 2px solid #333; width: 100%; max-width: 480px; padding: 25px; border-radius: 24px; box-shadow: 0 0 50px #000; max-height: 85vh; overflow-y: auto; }
         .close-btn { margin-top: 15px; width: 100%; padding: 15px; background: #27272a; border: 2px solid #444; color: white; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
         .section-header { margin: 25px 0 15px; font-size: 1.3rem; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+        
+        /* GRIMOIRE STYLES */
+        .grimoire-entry {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), transparent);
+            border: 1px solid var(--gold); padding: 15px; border-radius: 12px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden;
+        }
+        .grimoire-entry::after {
+            content: "MASTERED"; position: absolute; right: -20px; top: 10px;
+            background: var(--gold); color: black; font-size: 0.6rem; font-weight: 900;
+            padding: 2px 25px; transform: rotate(45deg);
+        }
+        .grimoire-info { display: flex; flex-direction: column; gap: 4px; }
+        .grimoire-title { color: white; font-weight: bold; font-size: 1.1rem; }
+        .grimoire-meta { color: var(--gold); font-size: 0.7rem; font-family: 'JetBrains Mono'; }
+
         .log-entry { font-size: 0.8rem; padding: 10px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; color: #888; }
         .floater { position: fixed; pointer-events: none; font-weight: 900; font-size: 1.8rem; z-index: 1000; animation: floatUpText 0.8s steps(8) forwards; color: var(--gold); text-shadow: 2px 2px 0px #000; }
         @keyframes floatUpText { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
@@ -156,8 +174,8 @@
         </div>
         <div class="hud-btns">
             <button class="circle-btn" id="bgmBtn" onclick="toggleBGM()" title="Müzik">🎵</button>
+            <button class="circle-btn" onclick="openModal('grimoireModal')" title="Grimoire">📔</button>
             <button class="circle-btn" onclick="openModal('rankModal')" title="Rütbeler">❓</button>
-            <button class="circle-btn" onclick="openModal('logModal')" title="Günlük">📜</button>
             <button class="circle-btn" onclick="openModal('manageModal')" title="Ayarlar">⚙️</button>
             <button class="circle-btn" onclick="openModal('saveModal')" title="Yedek">💾</button>
         </div>
@@ -181,22 +199,33 @@
         </div>
     </div>
 
-    <!-- MODALS (Rank, Log, Manage, Save, Level) -->
+    <!-- MODALS -->
+    <div id="grimoireModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2>
+            <p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Tamamlanan efsanevi yetenekler buraya kaydedilir.</p>
+            <div id="grimoireLog"></div>
+            <button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button>
+        </div>
+    </div>
+
     <div id="rankModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Rütbe Skalası</h2><div id="rankTable" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('rankModal')">KAPAT</button></div></div>
-    <div id="logModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Macera Günlüğü</h2><div id="historyLog" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('logModal')">KAPAT</button></div></div>
+    
     <div id="manageModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Zindan Ayarları</h2><div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin:15px 0; border: 1px solid #333;"><input type="text" id="newC_Code" placeholder="Kod (MAT202)"><input type="text" id="newC_Name" placeholder="İsim (Diferansiyel)"><input type="text" id="newC_Emoji" placeholder="Emoji (⚔️)"><button class="btn-summon" style="padding:10px" onclick="addNewCourse()">EKLE</button></div><div id="courseManageList"></div><button class="close-btn" onclick="closeModal('manageModal')">KAPAT</button></div></div>
+    
     <div id="saveModal" class="modal-overlay"><div class="modal-content" style="text-align:center;"><h2 class="rpg-font" style="color:var(--gold)">Veri Kristali</h2><p style="margin:15px 0; color:#888; font-size:0.9rem;">Zindan verilerini yedekle.</p><button class="btn-finish" style="border-color:var(--accent); color:var(--accent); margin-bottom:12px;" onclick="exportData()">💎 KRİSTALİ KOPYALA</button><button class="btn-finish" style="border-color:var(--druid); color:var(--druid);" onclick="importData()">📥 KRİSTAL YÜKLE</button><button class="close-btn" onclick="closeModal('saveModal')">KAPAT</button></div></div>
+    
     <div id="levelModal" class="modal-overlay"><div class="modal-content" style="text-align:center; border: 4px solid var(--gold);"><div style="font-size:5rem">🏆</div><h1 class="rpg-font" style="color:var(--gold)">TERFİ ALDIN!</h1><p id="newLvl" class="rpg-font" style="font-size:1.5rem; color:white; margin-top:10px;"></p><button class="close-btn" style="background:var(--gold); color:black;" onclick="closeModal('levelModal')">DEVAM ET</button></div></div>
 
     <script>
-        // --- SERVICE WORKER (PWA Yükleme İçin Kritik) ---
+        // --- SERVICE WORKER ---
         if ('serviceWorker' in navigator) {
             const swCode = `self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request)); });`;
             const blob = new Blob([swCode], { type: 'text/javascript' });
             navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
 
-        const DB_KEY = 'dungeon_engineer_dynamic_v3';
+        const DB_KEY = 'dungeon_engineer_grimoire_v4';
         const RANKS = [
             { name: "Kayıp Stajyer", min: 0, max: 1000, icon: "🧙‍♂️" },
             { name: "Kod Çırağı", min: 1000, max: 3000, icon: "📜" },
@@ -272,7 +301,6 @@
             const item = state.db.find(i => i.id === id); if(!item) return;
             const oldR = getRank().name, gain = item.tasks[idx].xp;
             item.tasks[idx].done = true; state.xp += gain;
-            state.history.unshift({t:item.t, q:item.tasks[idx].t, xp:gain, ts: Date.now()});
             playSfx('xp');
             const f = document.createElement('div'); f.className='floater mono-font'; f.innerText=`+${gain} XP`;
             f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
@@ -292,16 +320,27 @@
             if(id==='rankModal') {
                 const t = document.getElementById('rankTable'); t.innerHTML='';
                 RANKS.forEach(r => t.innerHTML += `<div class="log-entry" style="color:${r.name===getRank().name?'var(--gold)':'#555'}"><span>${r.icon} ${r.name}</span><span>${r.min}+ XP</span></div>`);
-            } else if(id==='logModal') {
-                const l = document.getElementById('historyLog'); l.innerHTML='';
-                state.history = state.history.filter(h => Date.now() - h.ts < (30 * 86400000));
-                if(state.history.length===0) l.innerHTML='Henüz kayıt yok...';
-                let lastM = "";
-                state.history.forEach(h => {
-                    const mName = new Date(h.ts).toLocaleDateString('tr-TR', {month:'long', year:'numeric'});
-                    if(mName !== lastM) { l.innerHTML += `<div style="color:var(--accent); margin-top:15px; font-weight:bold; font-size:0.7rem; border-bottom:1px solid #333">${mName.toUpperCase()}</div>`; lastM = mName; }
-                    l.innerHTML += `<div class="log-entry"><span>${h.t} - ${h.q}</span><span style="color:var(--gold)">+${h.xp}</span></div>`;
-                });
+            } else if(id==='grimoireModal') {
+                const l = document.getElementById('grimoireLog'); l.innerHTML='';
+                // 5/5 olan yetenekleri filtrele
+                const mastered = state.db.filter(item => item.tasks.every(t => t.done));
+                
+                if(mastered.length === 0) {
+                    l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic;">Henüz Grimoire\'a girecek kadar büyük bir zafer kazanılmadı...</p>';
+                } else {
+                    mastered.forEach(mItem => {
+                        const cData = state.courses[mItem.c] || {n:mItem.c, e:'📜'};
+                        l.innerHTML += `
+                            <div class="grimoire-entry">
+                                <div class="grimoire-info">
+                                    <div class="grimoire-title">${mItem.t}</div>
+                                    <div class="grimoire-meta">${cData.e} ${mItem.c} - ${cData.n}</div>
+                                </div>
+                                <div style="font-size:1.5rem">🏆</div>
+                            </div>
+                        `;
+                    });
+                }
             } else if(id==='manageModal') {
                 const ml = document.getElementById('courseManageList'); ml.innerHTML='';
                 for(let k in state.courses) ml.innerHTML+=`<div class="log-entry"><span>${state.courses[k].e} ${k}</span><button style="color:red; background:none; border:none; font-size:1.2rem; cursor:pointer" onclick="delCourse('${k}')">🗑️</button></div>`;
@@ -320,7 +359,10 @@
             document.getElementById('xpFill').style.width = Math.min(((state.xp-r.min)/(r.max-r.min))*100, 100)+'%';
             const sel = document.getElementById('courseSelect'); sel.innerHTML='';
             for(let k in state.courses) sel.innerHTML+=`<option value="${k}">${k} - ${state.courses[k].n}</option>`;
+            
             const ql = document.getElementById('questList'); ql.innerHTML=''; let count=0; const today = new Date(); today.setHours(0,0,0,0);
+            
+            // Aktif Questler (5/5 olmayan ve vakti gelmiş olanlar)
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 item.tasks.forEach((t, i) => {
@@ -330,11 +372,34 @@
                 });
             });
             document.getElementById('emptyState').style.display = count===0 ? 'block' : 'none';
+            
+            // Yetenek Ağacı (Sadece bitmemiş olanlar veya hepsi gösterilebilir - Burada hepsi gösteriliyor)
             const sl = document.getElementById('skillList'); sl.innerHTML='';
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 const pct = (item.tasks.filter(t=>t.done).length/5)*100;
-                sl.innerHTML += `<div class="skill-item"><div style="display:flex;align-items:center;gap:12px;flex:1"><div style="font-size:1.8rem">${cData.e}</div><div><div style="font-weight:bold;color:#fff;font-size:1rem">${item.t}</div><div style="font-size:0.7rem;color:var(--accent);font-weight:bold" class="mono-font">${item.c}</div></div></div><div style="display:flex;align-items:center;gap:12px"><div class="ring-container"><svg width="46" height="46"><circle stroke="#222" stroke-width="4" fill="transparent" r="20" cx="23" cy="23"/><circle stroke="var(--accent)" stroke-width="4" fill="transparent" r="20" cx="23" cy="23" style="stroke-dasharray:126; stroke-dashoffset:${126-(pct/100)*126}; transition:1s steps(10)"/></svg><div class="ring-text mono-font">%${Math.round(pct)}</div></div><button style="border:none;background:none;color:red;opacity:0.3;font-size:1.2rem;cursor:pointer" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button></div></div>`;
+                
+                // Eğer 100% ise Grimoire'a gitmiştir ama burada da listelemek istersen:
+                sl.innerHTML += `
+                    <div class="skill-item" style="${pct === 100 ? 'opacity:0.5; border-color:var(--gold);' : ''}">
+                        <div style="display:flex;align-items:center;gap:12px;flex:1">
+                            <div style="font-size:1.8rem">${pct === 100 ? '📔' : cData.e}</div>
+                            <div>
+                                <div style="font-weight:bold;color:#fff;font-size:1rem">${item.t}</div>
+                                <div style="font-size:0.7rem;color:var(--accent);font-weight:bold" class="mono-font">${item.c}</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px">
+                            <div class="ring-container">
+                                <svg width="46" height="46">
+                                    <circle stroke="#222" stroke-width="4" fill="transparent" r="20" cx="23" cy="23"/>
+                                    <circle stroke="${pct === 100 ? 'var(--gold)' : 'var(--accent)'}" stroke-width="4" fill="transparent" r="20" cx="23" cy="23" style="stroke-dasharray:126; stroke-dashoffset:${126-(pct/100)*126}; transition:1s steps(10)"/>
+                                </svg>
+                                <div class="ring-text mono-font" style="color:${pct === 100 ? 'var(--gold)' : 'white'}">%${Math.round(pct)}</div>
+                            </div>
+                            <button style="border:none;background:none;color:red;opacity:0.3;font-size:1.2rem;cursor:pointer" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button>
+                        </div>
+                    </div>`;
             });
         }
 

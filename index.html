@@ -164,7 +164,7 @@
     <div class="bg-prop" style="bottom:15%; left:-5%">⚔️</div>
 
     <div class="hud-panel">
-        <div class="hud-avatar" id="avatar" onclick="playSfx('summon')">🧙‍♂️</div>
+        <div class="hud-avatar" id="avatar" onclick="initAudioContext(); playSfx('summon')">🧙‍♂️</div>
         <div class="xp-container">
             <div class="xp-header">
                 <span id="rankLabel" class="xp-rank rpg-font">Kayıp Stajyer</span>
@@ -200,21 +200,10 @@
     </div>
 
     <!-- MODALS -->
-    <div id="grimoireModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2>
-            <p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Tamamlanan efsanevi yetenekler buraya kaydedilir.</p>
-            <div id="grimoireLog"></div>
-            <button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button>
-        </div>
-    </div>
-
+    <div id="grimoireModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2><p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Tamamlanan efsanevi yetenekler buraya kaydedilir.</p><div id="grimoireLog"></div><button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button></div></div>
     <div id="rankModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Rütbe Skalası</h2><div id="rankTable" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('rankModal')">KAPAT</button></div></div>
-    
-    <div id="manageModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Zindan Ayarları</h2><div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin:15px 0; border: 1px solid #333;"><input type="text" id="newC_Code" placeholder="Kod (MAT202)"><input type="text" id="newC_Name" placeholder="İsim (Diferansiyel)"><input type="text" id="newC_Emoji" placeholder="Emoji (⚔️)"><button class="btn-summon" style="padding:10px" onclick="addNewCourse()">EKLE</button></div><div id="courseManageList"></div><button class="close-btn" onclick="closeModal('manageModal')">KAPAT</button></div></div>
-    
+    <div id="manageModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Zindan Ayarları</h2><div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin:15px 0; border: 1px solid #333;"><input type="text" id="newC_Name" placeholder="Ders İsmi (Diferansiyel)"><input type="text" id="newC_Emoji" placeholder="Emoji (⚔️)"><button class="btn-summon" style="padding:10px" onclick="addNewCourse()">EKLE</button></div><div id="courseManageList"></div><button class="close-btn" onclick="closeModal('manageModal')">KAPAT</button></div></div>
     <div id="saveModal" class="modal-overlay"><div class="modal-content" style="text-align:center;"><h2 class="rpg-font" style="color:var(--gold)">Veri Kristali</h2><p style="margin:15px 0; color:#888; font-size:0.9rem;">Zindan verilerini yedekle.</p><button class="btn-finish" style="border-color:var(--accent); color:var(--accent); margin-bottom:12px;" onclick="exportData()">💎 KRİSTALİ KOPYALA</button><button class="btn-finish" style="border-color:var(--druid); color:var(--druid);" onclick="importData()">📥 KRİSTAL YÜKLE</button><button class="close-btn" onclick="closeModal('saveModal')">KAPAT</button></div></div>
-    
     <div id="levelModal" class="modal-overlay"><div class="modal-content" style="text-align:center; border: 4px solid var(--gold);"><div style="font-size:5rem">🏆</div><h1 class="rpg-font" style="color:var(--gold)">TERFİ ALDIN!</h1><p id="newLvl" class="rpg-font" style="font-size:1.5rem; color:white; margin-top:10px;"></p><button class="close-btn" style="background:var(--gold); color:black;" onclick="closeModal('levelModal')">DEVAM ET</button></div></div>
 
     <script>
@@ -225,7 +214,7 @@
             navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
 
-        const DB_KEY = 'dungeon_engineer_grimoire_v4';
+        const DB_KEY = 'dungeon_v5_final';
         const RANKS = [
             { name: "Kayıp Stajyer", min: 0, max: 1000, icon: "🧙‍♂️" },
             { name: "Kod Çırağı", min: 1000, max: 3000, icon: "📜" },
@@ -238,7 +227,6 @@
             { name: "Ejder Mühendis", min: 110000, max: 9999999, icon: "🐲" }
         ];
 
-        // 1. GÜN İSMİ "FlashSpell" OLARAK GÜNCELLENDİ
         const PROTOCOL = [
             { d: 1, i: "📖", t: "FlashSpell", desc: "Anki Girişi & Okuma", xp: 150 },
             { d: 3, i: "⚔️", t: "TALİM", desc: "3 Temel Soru Çöz", xp: 250 },
@@ -248,16 +236,22 @@
         ];
 
         let state = JSON.parse(localStorage.getItem(DB_KEY)) || {
-            courses: { 'MAT2062': { n: 'Diferansiyel', e: '⚔️' }, 'PHY1002': { n: 'Fizik II', e: '🧪' } },
-            db: [], history: [], xp: 0
+            courses: { 'MAT2062': { n: 'Diferansiyel', e: '⚔️' } },
+            db: [], history: [], xp: 0, musicOn: false
         };
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // --- AUDIO ENGINE ---
+        let audioCtx = null;
         let bgmInterval = null, isBGMPlaying = false, melodyStep = 0, chordIndex = 0;
         const CHORDS = [[220, 261, 329, 440], [174, 220, 261, 349], [196, 246, 293, 392], [164, 207, 246, 329]];
 
+        function initAudioContext() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
         function playSfx(type) {
-            if(audioCtx.state==='suspended') audioCtx.resume();
+            initAudioContext();
             const now = audioCtx.currentTime;
             const o = audioCtx.createOscillator(), g = audioCtx.createGain();
             o.connect(g); g.connect(audioCtx.destination);
@@ -265,12 +259,21 @@
             else if(type==='xp') { o.type='square'; o.frequency.setValueAtTime(880, now); g.gain.setValueAtTime(0.05, now); o.start(); o.stop(now+0.1); }
         }
 
-        function toggleBGM() {
-            if(audioCtx.state==='suspended') audioCtx.resume();
+        function toggleBGM(forceState = null) {
+            initAudioContext();
             const btn = document.getElementById('bgmBtn');
-            if (isBGMPlaying) { clearInterval(bgmInterval); isBGMPlaying = false; btn.classList.remove('active'); }
-            else {
-                isBGMPlaying = true; btn.classList.add('active');
+            const targetState = forceState !== null ? forceState : !isBGMPlaying;
+            
+            if (!targetState) {
+                if (bgmInterval) clearInterval(bgmInterval);
+                isBGMPlaying = false;
+                state.musicOn = false;
+                btn.classList.remove('active');
+            } else {
+                if (isBGMPlaying) return;
+                isBGMPlaying = true;
+                state.musicOn = true;
+                btn.classList.add('active');
                 bgmInterval = setInterval(() => {
                     const now = audioCtx.currentTime, currentChord = CHORDS[chordIndex];
                     const freq = currentChord[melodyStep % currentChord.length];
@@ -286,6 +289,7 @@
                     melodyStep++; if (melodyStep % 16 === 0) chordIndex = (chordIndex + 1) % CHORDS.length;
                 }, 350);
             }
+            save();
         }
 
         const save = () => { localStorage.setItem(DB_KEY, JSON.stringify(state)); render(); };
@@ -311,9 +315,14 @@
         }
 
         function addNewCourse() {
-            const code = document.getElementById('newC_Code').value.toUpperCase().trim(), name = document.getElementById('newC_Name').value.trim(), emoji = document.getElementById('newC_Emoji').value.trim() || '📜';
-            if(!code || !name) return; state.courses[code] = { n: name, e: emoji };
-            document.getElementById('newC_Code').value=''; document.getElementById('newC_Name').value=''; save(); openModal('manageModal');
+            const name = document.getElementById('newC_Name').value.trim();
+            const emoji = document.getElementById('newC_Emoji').value.trim() || '📜';
+            if(!name) return; 
+            // Otomatik kod oluştur (İsim kısaltması + Rastgele)
+            const code = name.substring(0,3).toUpperCase() + Math.floor(Math.random()*99);
+            state.courses[code] = { n: name, e: emoji };
+            document.getElementById('newC_Name').value=''; document.getElementById('newC_Emoji').value='';
+            save(); openModal('manageModal');
         }
 
         function openModal(id) {
@@ -323,28 +332,17 @@
                 RANKS.forEach(r => t.innerHTML += `<div class="log-entry" style="color:${r.name===getRank().name?'var(--gold)':'#555'}"><span>${r.icon} ${r.name}</span><span>${r.min}+ XP</span></div>`);
             } else if(id==='grimoireModal') {
                 const l = document.getElementById('grimoireLog'); l.innerHTML='';
-                // 5/5 olan yetenekleri filtrele (Mastered)
                 const mastered = state.db.filter(item => item.tasks.every(t => t.done));
-                
-                if(mastered.length === 0) {
-                    l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic;">Henüz Grimoire\'a girecek kadar büyük bir zafer kazanılmadı...</p>';
-                } else {
+                if(mastered.length === 0) { l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic; padding:20px;">Henüz Grimoire\'a girecek kadar görkemli bir büyü öğrenilmedi...</p>'; }
+                else {
                     mastered.forEach(mItem => {
                         const cData = state.courses[mItem.c] || {n:mItem.c, e:'📜'};
-                        l.innerHTML += `
-                            <div class="grimoire-entry">
-                                <div class="grimoire-info">
-                                    <div class="grimoire-title">${mItem.t}</div>
-                                    <div class="grimoire-meta">${cData.e} ${mItem.c} - ${cData.n}</div>
-                                </div>
-                                <div style="font-size:1.5rem">🏆</div>
-                            </div>
-                        `;
+                        l.innerHTML += `<div class="grimoire-entry"><div class="grimoire-info"><div class="grimoire-title">${mItem.t}</div><div class="grimoire-meta">${cData.e} ${cData.n}</div></div><div style="font-size:1.5rem">🏆</div></div>`;
                     });
                 }
             } else if(id==='manageModal') {
                 const ml = document.getElementById('courseManageList'); ml.innerHTML='';
-                for(let k in state.courses) ml.innerHTML+=`<div class="log-entry"><span>${state.courses[k].e} ${k}</span><button style="color:red; background:none; border:none; font-size:1.2rem; cursor:pointer" onclick="delCourse('${k}')">🗑️</button></div>`;
+                for(let k in state.courses) ml.innerHTML+=`<div class="log-entry"><span>${state.courses[k].e} ${state.courses[k].n}</span><button style="color:red; background:none; border:none; font-size:1.2rem; cursor:pointer" onclick="delCourse('${k}')">🗑️</button></div>`;
             }
             m.style.display='flex';
         }
@@ -352,60 +350,50 @@
         const closeModal = (id) => document.getElementById(id).style.display='none';
         const delCourse = (k) => { if(confirm('Silinsin mi?')) { delete state.courses[k]; save(); openModal('manageModal'); } };
         const exportData = () => { const code = btoa(encodeURIComponent(JSON.stringify(state))); const t = document.createElement("textarea"); document.body.appendChild(t); t.value=code; t.select(); document.execCommand("copy"); document.body.removeChild(t); alert("Kristal Kopyalandı!"); };
-        const importData = () => { try { state=JSON.parse(decodeURIComponent(atob(prompt("Kodu Yapıştır:")))); save(); } catch(e){alert("Hata!");} };
+        const importData = () => { try { state=JSON.parse(decodeURIComponent(atob(prompt("Kodu Yapıştır:")))); save(); location.reload(); } catch(e){alert("Hata!");} };
 
         function render() {
             const r = getRank(); document.getElementById('rankLabel').innerText = r.name; document.getElementById('avatar').innerText = r.icon;
             document.getElementById('xpLabel').innerText = state.xp.toLocaleString();
             document.getElementById('xpFill').style.width = Math.min(((state.xp-r.min)/(r.max-r.min))*100, 100)+'%';
             const sel = document.getElementById('courseSelect'); sel.innerHTML='';
-            for(let k in state.courses) sel.innerHTML+=`<option value="${k}">${k} - ${state.courses[k].n}</option>`;
-            
+            for(let k in state.courses) sel.innerHTML+=`<option value="${k}">${state.courses[k].n}</option>`;
             const ql = document.getElementById('questList'); ql.innerHTML=''; let count=0; const today = new Date(); today.setHours(0,0,0,0);
-            
-            // Aktif Questler (5/5 olmayan ve vakti gelmiş olanlar)
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 item.tasks.forEach((t, i) => {
                     if(!t.done && new Date(t.date) <= today) {
-                        count++; ql.innerHTML += `<div class="quest-card"><div class="q-stripe" style="background:var(--accent)"></div><div class="q-body"><div class="q-meta"><span>${cData.e} ${item.c}</span><span style="color:var(--gold)">+${t.xp} XP</span></div><div class="q-title rpg-font">${item.t}</div><div class="obj-box"><span>${t.i}</span><div><div style="font-weight:bold; font-size:0.85rem; color:var(--accent);">${t.t}</div><div style="font-size:0.75rem; color:#888;">${t.desc}</div></div></div><button class="btn-finish rpg-font" onclick="completeQuest(event,${item.id},${i})">⚔️ QUESTİ BİTİR</button></div></div>`;
+                        count++; ql.innerHTML += `<div class="quest-card"><div class="q-stripe" style="background:var(--accent)"></div><div class="q-body"><div class="q-meta"><span>${cData.e} ${cData.n}</span><span style="color:var(--gold)">+${t.xp} XP</span></div><div class="q-title rpg-font">${item.t}</div><div class="obj-box"><span>${t.i}</span><div><div style="font-weight:bold; font-size:0.85rem; color:var(--accent);">${t.t}</div><div style="font-size:0.75rem; color:#888;">${t.desc}</div></div></div><button class="btn-finish rpg-font" onclick="completeQuest(event,${item.id},${i})">⚔️ QUESTİ BİTİR</button></div></div>`;
                     }
                 });
             });
             document.getElementById('emptyState').style.display = count===0 ? 'block' : 'none';
-            
-            // Yetenek Ağacı
             const sl = document.getElementById('skillList'); sl.innerHTML='';
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 const pct = (item.tasks.filter(t=>t.done).length/5)*100;
-                
-                sl.innerHTML += `
-                    <div class="skill-item" style="${pct === 100 ? 'opacity:0.5; border-color:var(--gold);' : ''}">
-                        <div style="display:flex;align-items:center;gap:12px;flex:1">
-                            <div style="font-size:1.8rem">${pct === 100 ? '📔' : cData.e}</div>
-                            <div>
-                                <div style="font-weight:bold;color:#fff;font-size:1rem">${item.t}</div>
-                                <div style="font-size:0.7rem;color:var(--accent);font-weight:bold" class="mono-font">${item.c}</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:12px">
-                            <div class="ring-container">
-                                <svg width="46" height="46">
-                                    <circle stroke="#222" stroke-width="4" fill="transparent" r="20" cx="23" cy="23"/>
-                                    <circle stroke="${pct === 100 ? 'var(--gold)' : 'var(--accent)'}" stroke-width="4" fill="transparent" r="20" cx="23" cy="23" style="stroke-dasharray:126; stroke-dashoffset:${126-(pct/100)*126}; transition:1s steps(10)"/>
-                                </svg>
-                                <div class="ring-text mono-font" style="color:${pct === 100 ? 'var(--gold)' : 'white'}">%${Math.round(pct)}</div>
-                            </div>
-                            <button style="border:none;background:none;color:red;opacity:0.3;font-size:1.2rem;cursor:pointer" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button>
-                        </div>
-                    </div>`;
+                sl.innerHTML += `<div class="skill-item" style="${pct === 100 ? 'opacity:0.5; border-color:var(--gold);' : ''}"><div style="display:flex;align-items:center;gap:12px;flex:1"><div style="font-size:1.8rem">${pct === 100 ? '📔' : cData.e}</div><div><div style="font-weight:bold;color:#fff;font-size:1rem">${item.t}</div><div style="font-size:0.7rem;color:var(--accent);font-weight:bold" class="mono-font">${cData.n}</div></div></div><div style="display:flex;align-items:center;gap:12px"><div class="ring-container"><svg width="46" height="46"><circle stroke="#222" stroke-width="4" fill="transparent" r="20" cx="23" cy="23"/><circle stroke="${pct === 100 ? 'var(--gold)' : 'var(--accent)'}" stroke-width="4" fill="transparent" r="20" cx="23" cy="23" style="stroke-dasharray:126; stroke-dashoffset:${126-(pct/100)*126}; transition:1s steps(10)"/></svg><div class="ring-text mono-font" style="color:${pct === 100 ? 'var(--gold)' : 'white'}">%${Math.round(pct)}</div></div><button style="border:none;background:none;color:red;opacity:0.3;font-size:1.2rem;cursor:pointer" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button></div></div>`;
             });
+
+            // Müzik Butonu Durumu
+            const bgmBtn = document.getElementById('bgmBtn');
+            if(state.musicOn) bgmBtn.classList.add('active');
+            else bgmBtn.classList.remove('active');
         }
 
         for(let i=0;i<40;i++){ 
-            const p=document.createElement('div'); p.className='particle'; p.style.left=Math.random()*100+'vw'; p.style.width=p.style.height=Math.random()*3+1+'px'; p.style.backgroundColor=Math.random()>0.5?'var(--gold)':'#fff'; p.style.animationDuration=Math.random()*10+5+'s'; p.style.animationDelay=Math.random()*5+'s'; document.getElementById('particles').appendChild(p); 
+            const p=document.createElement('div'); p.className='particle'; 
+            p.style.left=Math.random()*100+'vw'; p.style.width=p.style.height=Math.random()*3+1+'px'; 
+            p.style.backgroundColor=Math.random()>0.5?'var(--gold)':'#fff';
+            p.style.animationDuration=Math.random()*10+5+'s'; p.style.animationDelay=Math.random()*5+'s'; 
+            document.getElementById('particles').appendChild(p); 
         }
+
+        // Sayfa yüklendiğinde eğer müzik açıksa başlat (Kullanıcı etkileşimi şartı nedeniyle ilk tıklamada başlar)
+        window.addEventListener('click', () => {
+            if(state.musicOn && !isBGMPlaying) toggleBGM(true);
+        }, { once: true });
+
         render();
     </script>
 </body>

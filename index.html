@@ -11,10 +11,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZindanMüh">
     
-    <!-- MANIFEST -->
+    <!-- MANIFEST (Base64 Encoded) -->
     <link rel="manifest" href='data:application/json;charset=utf-8,%7B%22name%22%3A%22M%C3%BChendislik%20Zindan%C4%B1%22%2C%22short_name%22%3A%22Zindan%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23050507%22%2C%22theme_color%22%3A%22%23050507%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F3421%2F3421110.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D'>
 
-    <title>Dungeon Engineer: Grimoire Edition</title>
+    <title>Dungeon Engineer: God Mode</title>
     
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
@@ -200,7 +200,7 @@
     </div>
 
     <!-- MODALS -->
-    <div id="grimoireModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2><p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Tamamlanan efsanevi yetenekler buraya kaydedilir.</p><div id="grimoireLog"></div><button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button></div></div>
+    <div id="grimoireModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2><p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Henüz Grimoire'a girecek kadar görkemli bir büyü öğrenilmedi...</p><div id="grimoireLog"></div><button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button></div></div>
     <div id="rankModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Rütbe Skalası</h2><div id="rankTable" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('rankModal')">KAPAT</button></div></div>
     <div id="manageModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Zindan Ayarları</h2><div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin:15px 0; border: 1px solid #333;"><input type="text" id="newC_Name" placeholder="Ders İsmi (Diferansiyel)"><input type="text" id="newC_Emoji" placeholder="Emoji (⚔️)"><button class="btn-summon" style="padding:10px" onclick="addNewCourse()">EKLE</button></div><div id="courseManageList"></div><button class="close-btn" onclick="closeModal('manageModal')">KAPAT</button></div></div>
     <div id="saveModal" class="modal-overlay"><div class="modal-content" style="text-align:center;"><h2 class="rpg-font" style="color:var(--gold)">Veri Kristali</h2><p style="margin:15px 0; color:#888; font-size:0.9rem;">Zindan verilerini yedekle.</p><button class="btn-finish" style="border-color:var(--accent); color:var(--accent); margin-bottom:12px;" onclick="exportData()">💎 KRİSTALİ KOPYALA</button><button class="btn-finish" style="border-color:var(--druid); color:var(--druid);" onclick="importData()">📥 KRİSTAL YÜKLE</button><button class="close-btn" onclick="closeModal('saveModal')">KAPAT</button></div></div>
@@ -214,7 +214,7 @@
             navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
 
-        const DB_KEY = 'dungeon_v5_final';
+        const DB_KEY = 'dungeon_engineer_god_mode_v2';
         const RANKS = [
             { name: "Kayıp Stajyer", min: 0, max: 1000, icon: "🧙‍♂️" },
             { name: "Kod Çırağı", min: 1000, max: 3000, icon: "📜" },
@@ -236,7 +236,10 @@
         ];
 
         let state = JSON.parse(localStorage.getItem(DB_KEY)) || {
-            courses: { 'MAT2062': { n: 'Diferansiyel', e: '⚔️' } },
+            courses: { 
+                'MAT2062': { n: 'Diferansiyel', e: '⚔️' }, 
+                'PHY1002': { n: 'Fizik II', e: '🧪' }
+            },
             db: [], history: [], xp: 0, musicOn: false
         };
 
@@ -305,8 +308,24 @@
         function completeQuest(e, id, idx) {
             const item = state.db.find(i => i.id === id); if(!item) return;
             const oldR = getRank().name, gain = item.tasks[idx].xp;
+            
+            // DİNAMİK ZAMAN KAYDIRMA (Dynamic Time Shift)
+            const today = new Date(); today.setHours(0,0,0,0);
+            const targetDate = new Date(item.tasks[idx].date); targetDate.setHours(0,0,0,0);
+            const diffTime = today - targetDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays > 0) {
+                for (let k = idx + 1; k < item.tasks.length; k++) {
+                    const oldFutureDate = new Date(item.tasks[k].date);
+                    oldFutureDate.setDate(oldFutureDate.getDate() + diffDays);
+                    item.tasks[k].date = oldFutureDate.toISOString();
+                }
+            }
+
             item.tasks[idx].done = true; state.xp += gain;
             playSfx('xp');
+            
             const f = document.createElement('div'); f.className='floater mono-font'; f.innerText=`+${gain} XP`;
             f.style.left=e.clientX+'px'; f.style.top=e.clientY+'px'; document.body.appendChild(f);
             setTimeout(()=>f.remove(),800);
@@ -318,7 +337,6 @@
             const name = document.getElementById('newC_Name').value.trim();
             const emoji = document.getElementById('newC_Emoji').value.trim() || '📜';
             if(!name) return; 
-            // Otomatik kod oluştur (İsim kısaltması + Rastgele)
             const code = name.substring(0,3).toUpperCase() + Math.floor(Math.random()*99);
             state.courses[code] = { n: name, e: emoji };
             document.getElementById('newC_Name').value=''; document.getElementById('newC_Emoji').value='';
@@ -331,10 +349,13 @@
                 const t = document.getElementById('rankTable'); t.innerHTML='';
                 RANKS.forEach(r => t.innerHTML += `<div class="log-entry" style="color:${r.name===getRank().name?'var(--gold)':'#555'}"><span>${r.icon} ${r.name}</span><span>${r.min}+ XP</span></div>`);
             } else if(id==='grimoireModal') {
-                const l = document.getElementById('grimoireLog'); l.innerHTML='';
+                const l = document.getElementById('grimoireLog'); 
                 const mastered = state.db.filter(item => item.tasks.every(t => t.done));
-                if(mastered.length === 0) { l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic; padding:20px;">Henüz Grimoire\'a girecek kadar görkemli bir büyü öğrenilmedi...</p>'; }
-                else {
+                
+                if(mastered.length === 0) { 
+                    l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic; padding:20px;">Henüz Grimoire\'a girecek kadar görkemli bir büyü öğrenilmedi...</p>'; 
+                } else {
+                    l.innerHTML = '';
                     mastered.forEach(mItem => {
                         const cData = state.courses[mItem.c] || {n:mItem.c, e:'📜'};
                         l.innerHTML += `<div class="grimoire-entry"><div class="grimoire-info"><div class="grimoire-title">${mItem.t}</div><div class="grimoire-meta">${cData.e} ${cData.n}</div></div><div style="font-size:1.5rem">🏆</div></div>`;
@@ -359,6 +380,7 @@
             const sel = document.getElementById('courseSelect'); sel.innerHTML='';
             for(let k in state.courses) sel.innerHTML+=`<option value="${k}">${state.courses[k].n}</option>`;
             const ql = document.getElementById('questList'); ql.innerHTML=''; let count=0; const today = new Date(); today.setHours(0,0,0,0);
+            
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
                 item.tasks.forEach((t, i) => {
@@ -375,7 +397,6 @@
                 sl.innerHTML += `<div class="skill-item" style="${pct === 100 ? 'opacity:0.5; border-color:var(--gold);' : ''}"><div style="display:flex;align-items:center;gap:12px;flex:1"><div style="font-size:1.8rem">${pct === 100 ? '📔' : cData.e}</div><div><div style="font-weight:bold;color:#fff;font-size:1rem">${item.t}</div><div style="font-size:0.7rem;color:var(--accent);font-weight:bold" class="mono-font">${cData.n}</div></div></div><div style="display:flex;align-items:center;gap:12px"><div class="ring-container"><svg width="46" height="46"><circle stroke="#222" stroke-width="4" fill="transparent" r="20" cx="23" cy="23"/><circle stroke="${pct === 100 ? 'var(--gold)' : 'var(--accent)'}" stroke-width="4" fill="transparent" r="20" cx="23" cy="23" style="stroke-dasharray:126; stroke-dashoffset:${126-(pct/100)*126}; transition:1s steps(10)"/></svg><div class="ring-text mono-font" style="color:${pct === 100 ? 'var(--gold)' : 'white'}">%${Math.round(pct)}</div></div><button style="border:none;background:none;color:red;opacity:0.3;font-size:1.2rem;cursor:pointer" onclick="if(confirm('Sil?')){state.db=state.db.filter(i=>i.id!==${item.id});save()}">🗑️</button></div></div>`;
             });
 
-            // Müzik Butonu Durumu
             const bgmBtn = document.getElementById('bgmBtn');
             if(state.musicOn) bgmBtn.classList.add('active');
             else bgmBtn.classList.remove('active');
@@ -389,7 +410,6 @@
             document.getElementById('particles').appendChild(p); 
         }
 
-        // Sayfa yüklendiğinde eğer müzik açıksa başlat (Kullanıcı etkileşimi şartı nedeniyle ilk tıklamada başlar)
         window.addEventListener('click', () => {
             if(state.musicOn && !isBGMPlaying) toggleBGM(true);
         }, { once: true });

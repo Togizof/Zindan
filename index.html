@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#050507">
     
-    <!-- PWA & MOBİL AYARLAR -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZindanMüh">
     
-    <!-- MANIFEST -->
     <link rel="manifest" href='data:application/json;charset=utf-8,%7B%22name%22%3A%22M%C3%BChendislik%20Zindan%C4%B1%22%2C%22short_name%22%3A%22Zindan%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23050507%22%2C%22theme_color%22%3A%22%23050507%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F3421%2F3421110.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D'>
 
-    <title>Dungeon Engineer: God Mode</title>
+    <title>Dungeon Engineer: Dynamic Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
@@ -183,7 +181,6 @@
 
     <div class="main-grid">
         <div class="left-col">
-            <!-- PARŞÖMEN EKLEME KISMI BURADAN KALDIRILIP AYARLARA TAŞINDI -->
             <h3 class="section-header rpg-font">🛡️ Aktif Questler</h3>
             <div id="questList"></div>
             <div id="emptyState" style="text-align:center; padding:50px; color:#444; font-style:italic;">"Zindanda sessizlik hakim..."</div>
@@ -195,7 +192,7 @@
     </div>
 
     <!-- MODALS -->
-    <div id="grimoireModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2><p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Mastered yeteneklerin kütüphanesi.</p><div id="grimoireLog"></div><button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button></div></div>
+    <div id="grimoireModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold); text-align:center;">📔 Grimoire</h2><p style="text-align:center; color:#666; font-size:0.75rem; margin-bottom:20px;">Henüz Grimoire'a girecek kadar görkemli bir büyü öğrenilmedi...</p><div id="grimoireLog"></div><button class="close-btn" onclick="closeModal('grimoireModal')">KAPAT</button></div></div>
     
     <div id="rankModal" class="modal-overlay"><div class="modal-content"><h2 class="rpg-font" style="color:var(--gold)">Rütbe Skalası</h2><div id="rankTable" style="margin-top:15px;"></div><button class="close-btn" onclick="closeModal('rankModal')">KAPAT</button></div></div>
     
@@ -203,7 +200,6 @@
         <div class="modal-content">
             <h2 class="rpg-font" style="color:var(--gold); margin-bottom: 15px;">Zindan Ayarları</h2>
             
-            <!-- PARŞÖMEN EKLEME ALANI AYARLARA TAŞINDI -->
             <div class="summon-scroll" style="margin-bottom: 15px; padding: 15px; box-shadow: none;">
                 <div style="font-size:0.75rem; color:#888; margin-bottom:10px; letter-spacing:1px; font-weight:bold;">[ YENİ YETENEK PARŞÖMENİ ]</div>
                 <select id="courseSelect" class="mono-font"></select>
@@ -211,21 +207,20 @@
                 <button class="btn-summon rpg-font" onclick="addTopic(); closeModal('manageModal')"><span>📜</span> PARŞÖMENİ AÇ</button>
             </div>
 
-            <!-- DERS TANIMLAMA ALANI -->
             <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; margin:15px 0; border: 1px solid #333;">
                 <div style="font-size:0.75rem; color:#888; margin-bottom:10px; letter-spacing:1px; font-weight:bold;">[ YENİ DERS TANIMLA ]</div>
-                <input type="text" id="newC_Code" placeholder="Kod (İsteğe Bağlı)">
                 <input type="text" id="newC_Name" placeholder="Ders İsmi">
                 <input type="text" id="newC_Emoji" placeholder="Emoji">
                 <button class="btn-summon" style="padding:10px" onclick="addNewCourse()">EKLE</button>
             </div>
             
             <div id="courseManageList"></div>
+            <div style="text-align:center; color:#555; font-size:0.75rem; margin-top:15px; margin-bottom:5px;" class="mono-font">v2.1.0 - 04:00 AM Reset</div>
             <button class="close-btn" onclick="closeModal('manageModal')">KAPAT</button>
         </div>
     </div>
     
-    <div id="saveModal" class="modal-overlay"><div class="modal-content" style="text-align:center;"><h2 class="rpg-font" style="color:var(--gold)">Veri Kristali</h2><p style="margin:15px 0; color:#888; font-size:0.9rem;">Yedek kodu al veya yükle.</p><button class="btn-finish" style="border-color:var(--accent); color:var(--accent); margin-bottom:12px;" onclick="exportData()">💎 KRİSTALİ KOPYALA</button><button class="btn-finish" style="border-color:var(--druid); color:var(--druid);" onclick="importData()">📥 KRİSTAL YÜKLE</button><button class="close-btn" onclick="closeModal('saveModal')">KAPAT</button></div></div>
+    <div id="saveModal" class="modal-overlay"><div class="modal-content" style="text-align:center;"><h2 class="rpg-font" style="color:var(--gold)">Veri Kristali</h2><p style="margin:15px 0; color:#888; font-size:0.9rem;">Zindan verilerini yedekle.</p><button class="btn-finish" style="border-color:var(--accent); color:var(--accent); margin-bottom:12px;" onclick="exportData()">💎 KRİSTALİ KOPYALA</button><button class="btn-finish" style="border-color:var(--druid); color:var(--druid);" onclick="importData()">📥 KRİSTAL YÜKLE</button><button class="close-btn" onclick="closeModal('saveModal')">KAPAT</button></div></div>
     
     <div id="levelModal" class="modal-overlay"><div class="modal-content" style="text-align:center; border: 4px solid var(--gold);"><div style="font-size:5rem">🏆</div><h1 class="rpg-font" style="color:var(--gold)">TERFİ ALDIN!</h1><p id="newLvl" class="rpg-font" style="font-size:1.5rem; color:white; margin-top:10px;"></p><button class="close-btn" style="background:var(--gold); color:black;" onclick="closeModal('levelModal')">DEVAM ET</button></div></div>
 
@@ -237,7 +232,7 @@
             navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
 
-        const DB_KEY = 'dungeon_v5_final';
+        const DB_KEY = 'dungeon_v6_dynamic';
         const RANKS = [
             { name: "Kayıp Stajyer", min: 0, max: 1000, icon: "🧙‍♂️" },
             { name: "Kod Çırağı", min: 1000, max: 3000, icon: "📜" },
@@ -318,10 +313,21 @@
         const save = () => { localStorage.setItem(DB_KEY, JSON.stringify(state)); render(); };
         const getRank = () => RANKS.find(r => state.xp >= r.min && state.xp < r.max) || RANKS[RANKS.length-1];
 
+        // 04:00 AM HESAPLAMA FONKSİYONU
+        function getTarget4AM(daysForward) {
+            let d = new Date();
+            // Gece 00:00 ile 03:59 arasıysa, bunu Anki mantığıyla "dün" olarak say
+            if (d.getHours() < 4) d.setDate(d.getDate() - 1);
+            d.setDate(d.getDate() + daysForward);
+            d.setHours(4, 0, 0, 0);
+            return d;
+        }
+
         function addTopic() {
             const c = document.getElementById('courseSelect').value, t = document.getElementById('topicInput').value.trim();
             if(!t) return; playSfx('summon');
-            state.db.unshift({ id: Date.now(), c, t, tasks: PROTOCOL.map(p => ({ ...p, done: false, date: new Date(Date.now()+p.d*86400000).toISOString() })) });
+            // Yeni görevler tam olarak 04:00'a sabitlendi
+            state.db.unshift({ id: Date.now(), c, t, tasks: PROTOCOL.map(p => ({ ...p, done: false, date: getTarget4AM(p.d).toISOString() })) });
             document.getElementById('topicInput').value=''; save();
         }
 
@@ -329,17 +335,23 @@
             const item = state.db.find(i => i.id === id); if(!item) return;
             const oldR = getRank().name, gain = item.tasks[idx].xp;
             
-            // DİNAMİK ZAMAN KAYDIRMA (Dynamic Time Shift)
-            const today = new Date();
-            today.setHours(0,0,0,0);
+            // DİNAMİK ZAMAN KAYDIRMA (04:00 AM MANTIĞIYLA)
+            const now = new Date();
             const targetDate = new Date(item.tasks[idx].date);
-            targetDate.setHours(0,0,0,0);
             
-            const diffTime = today - targetDate;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            let logicalNow = new Date(now);
+            if (logicalNow.getHours() < 4) logicalNow.setDate(logicalNow.getDate() - 1);
+            logicalNow.setHours(0,0,0,0);
+            
+            let logicalTarget = new Date(targetDate);
+            if (logicalTarget.getHours() < 4) logicalTarget.setDate(logicalTarget.getDate() - 1);
+            logicalTarget.setHours(0,0,0,0);
+            
+            const diffTime = logicalNow - logicalTarget;
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
             if (diffDays > 0) {
-                // Sadece bu yeteneğe ait gelecekteki (henüz yapılmamış) görevleri ötele
+                // Eğer görev gecikmeli yapıldıysa, gelecekteki görevleri ötele (04:00 bozulmadan kalır)
                 for (let k = idx + 1; k < item.tasks.length; k++) {
                     const oldFutureDate = new Date(item.tasks[k].date);
                     oldFutureDate.setDate(oldFutureDate.getDate() + diffDays);
@@ -347,8 +359,7 @@
                 }
             }
 
-            item.tasks[idx].done = true; 
-            state.xp += gain;
+            item.tasks[idx].done = true; state.xp += gain;
             playSfx('xp');
             
             const f = document.createElement('div'); f.className='floater mono-font'; f.innerText=`+${gain} XP`;
@@ -359,14 +370,12 @@
         }
 
         function addNewCourse() {
-            const codeRaw = document.getElementById('newC_Code').value.toUpperCase().trim();
             const name = document.getElementById('newC_Name').value.trim();
             const emoji = document.getElementById('newC_Emoji').value.trim() || '📜';
             if(!name) return; 
-            // Eğer kod boşsa ismin ilk 3 harfi + rastgele sayı vererek çakışmayı önle
-            const code = codeRaw || (name.substring(0,3).toUpperCase() + Math.floor(Math.random()*99));
+            const code = name.substring(0,3).toUpperCase() + Math.floor(Math.random()*99);
             state.courses[code] = { n: name, e: emoji };
-            document.getElementById('newC_Code').value=''; document.getElementById('newC_Name').value=''; document.getElementById('newC_Emoji').value='';
+            document.getElementById('newC_Name').value=''; document.getElementById('newC_Emoji').value='';
             save(); openModal('manageModal');
         }
 
@@ -378,17 +387,19 @@
             } else if(id==='grimoireModal') {
                 const l = document.getElementById('grimoireLog'); 
                 const mastered = state.db.filter(item => item.tasks.every(t => t.done));
-                if(mastered.length === 0) { l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic; padding:20px;">Henüz Grimoire\'a girecek kadar görkemli bir büyü öğrenilmedi...</p>'; }
-                else {
+                
+                if(mastered.length === 0) { 
+                    l.innerHTML = '<p style="text-align:center; color:gray; font-style:italic; padding:20px;">Henüz Grimoire\'a girecek kadar görkemli bir büyü öğrenilmedi...</p>'; 
+                } else {
                     l.innerHTML = '';
                     mastered.forEach(mItem => {
                         const cData = state.courses[mItem.c] || {n:mItem.c, e:'📜'};
-                        l.innerHTML += `<div class="grimoire-entry"><div class="grimoire-info"><div class="grimoire-title">${mItem.t}</div><div class="grimoire-meta">${cData.e} ${mItem.c} - ${cData.n}</div></div><div style="font-size:1.5rem">🏆</div></div>`;
+                        l.innerHTML += `<div class="grimoire-entry"><div class="grimoire-info"><div class="grimoire-title">${mItem.t}</div><div class="grimoire-meta">${cData.e} ${cData.n}</div></div><div style="font-size:1.5rem">🏆</div></div>`;
                     });
                 }
             } else if(id==='manageModal') {
                 const ml = document.getElementById('courseManageList'); ml.innerHTML='';
-                for(let k in state.courses) ml.innerHTML+=`<div class="log-entry"><span>${state.courses[k].e} ${k} - ${state.courses[k].n}</span><button style="color:red; background:none; border:none; font-size:1.2rem; cursor:pointer" onclick="delCourse('${k}')">🗑️</button></div>`;
+                for(let k in state.courses) ml.innerHTML+=`<div class="log-entry"><span>${state.courses[k].e} ${state.courses[k].n}</span><button style="color:red; background:none; border:none; font-size:1.2rem; cursor:pointer" onclick="delCourse('${k}')">🗑️</button></div>`;
             }
             m.style.display='flex';
         }
@@ -405,7 +416,8 @@
             const sel = document.getElementById('courseSelect'); sel.innerHTML='';
             for(let k in state.courses) sel.innerHTML+=`<option value="${k}">${state.courses[k].n}</option>`;
             
-            const ql = document.getElementById('questList'); ql.innerHTML=''; let count=0; const today = new Date(); today.setHours(0,0,0,0);
+            const ql = document.getElementById('questList'); ql.innerHTML=''; let count=0; 
+            const now = new Date(); // Artık 00:00:00 ile değil, anlık saatle kıyaslanacak
             
             state.db.forEach(item => {
                 const cData = state.courses[item.c] || {n:item.c, e:'📜'};
@@ -415,7 +427,8 @@
                 
                 if (nextTaskIdx !== -1) {
                     const t = item.tasks[nextTaskIdx];
-                    if (new Date(t.date) <= today) {
+                    // Eğer hedef tarih (04:00 AM) şu anki saatten küçük veya eşitse göster
+                    if (new Date(t.date) <= now) {
                         count++; 
                         ql.innerHTML += `<div class="quest-card"><div class="q-stripe" style="background:var(--accent)"></div><div class="q-body"><div class="q-meta"><span>${cData.e} ${cData.n}</span><span style="color:var(--gold)">+${t.xp} XP</span></div><div class="q-title rpg-font">${item.t}</div><div class="obj-box"><span>${t.i}</span><div><div style="font-weight:bold; font-size:0.85rem; color:var(--accent);">${t.t}</div><div style="font-size:0.75rem; color:#888;">${t.desc}</div></div></div><button class="btn-finish rpg-font" onclick="completeQuest(event,${item.id},${nextTaskIdx})">⚔️ QUESTİ BİTİR</button></div></div>`;
                     }
@@ -436,7 +449,6 @@
             else bgmBtn.classList.remove('active');
         }
 
-        // --- PARTICLE ENGINE ---
         for(let i=0;i<40;i++){ 
             const p=document.createElement('div'); p.className='particle'; 
             p.style.left=Math.random()*100+'vw'; p.style.width=p.style.height=Math.random()*3+1+'px'; 
@@ -445,7 +457,6 @@
             document.getElementById('particles').appendChild(p); 
         }
 
-        // Sayfa yüklendiğinde eğer müzik açıksa başlat
         window.addEventListener('click', () => {
             if(state.musicOn && !isBGMPlaying) toggleBGM(true);
         }, { once: true });
